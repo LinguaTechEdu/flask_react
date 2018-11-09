@@ -1,12 +1,17 @@
-var React = require('react');
-var uuid = require('node-uuid');
-
 var styleRequired = {
   color: "#ffaaaa"
 };
 
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
 
-class AddListItem extends React.Component {
+class TodoForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -18,11 +23,10 @@ class AddListItem extends React.Component {
     event.preventDefault();
 
     var item = {
-      id: uuid.v4(),
+      id: guid(),
       date: new Date(),
       name: this.refs.name.value.trim(),
-      description: this.refs.description.value.trim(),
-      quantity: this.refs.quantity.value
+      description: this.refs.description.value.trim()
     };
 
     this.props.addListItem(item);
@@ -31,7 +35,7 @@ class AddListItem extends React.Component {
   render () {
     return (
       <form onSubmit={this.handleSubmitEvent}>
-        <h3 className="page-header">Add New Item</h3>
+        <h3 className="page-header">Add New Task</h3>
 
         <div className="form-group">
           <label htmlFor="listItemName">Name <span style={styleRequired}>*</span></label>
@@ -44,10 +48,8 @@ class AddListItem extends React.Component {
         </div>
 
         <div className="form-group">
-          <label htmlFor="listItemQuantity">Quantity <span style={styleRequired}>*</span></label>
           <div className="row">
             <div className="col-xs-5 col-sm-6 col-md-4">
-              <input type="number" min="1" max="9999" step="1" defaultValue="1" className="form-control" id="listItemQuantity" required ref="quantity" />
             </div>
           </div>
         </div>
@@ -60,5 +62,3 @@ class AddListItem extends React.Component {
     );
   }
 }
-
-module.exports = AddListItem;

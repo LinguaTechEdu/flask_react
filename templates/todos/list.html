@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <script src="static/js/components/TodoList.jsx" type="text/jsx"></script>
+    <script src="static/js/components/List.jsx" type="text/jsx"></script>
+    <script src="static/js/components/TodoForm.jsx" type="text/jsx"></script>
+    <script src="static/js/components/Empty.jsx" type="text/jsx"></script>
+    <script src="static/js/components/Todo.jsx" type="text/jsx"></script>
+
+    <script type="text/jsx">
+        ReactDOM.render(<TodoList />, document.querySelector('div#root'));
+    </script>
+
+{% endblock %}

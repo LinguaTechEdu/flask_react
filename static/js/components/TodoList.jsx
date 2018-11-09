@@ -1,4 +1,4 @@
-class ShoppingList extends React.Component {
+class TodoList extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -9,7 +9,7 @@ class ShoppingList extends React.Component {
     this.addListItem = this.addListItem.bind(this);
     this.updateList = this.updateList.bind(this);
     this.removeListItem = this.removeListItem.bind(this);
-    this.removeAllListItems = this.removeAllListItems.bind(this)
+    this.removeAllListItems = this.removeAllListItems.bind(this);
   }
 
   updateList(newList) {

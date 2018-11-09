@@ -1,6 +1,3 @@
-var ListItem = require('./ListItem');
-var EmptyList = require('./EmptyList');
-
 class List extends React.Component {
     constructor(props) {
         super(props);
@@ -17,15 +14,7 @@ class List extends React.Component {
   }
 
   getTotalNumberOfListItems (items) {
-    var totalNumberOfItems = 0;
-    var item;
-
-    this.getListOfItemIds(items).forEach(function (itemId) {
-      item = items[itemId];
-      totalNumberOfItems = totalNumberOfItems + parseInt(item.quantity, 10);
-    });
-
-    return totalNumberOfItems;
+    return Object.keys(items).length;
   }
 
   createListItemElements (items) {
@@ -36,7 +25,7 @@ class List extends React.Component {
       .getListOfItemIds(items)
       .map(function createListItemElement(itemId) {
         item = items[itemId];
-        return (<ListItem item={item} removeListItem={this.props.removeListItem} key={item.id} />);
+        return (<Todo item={item} removeListItem={this.props.removeListItem} key={item.id} />);
       }.bind(this))
       .reverse()
     );
@@ -51,7 +40,7 @@ class List extends React.Component {
         <h3 className="page-header">
 
           <div>
-              Total Items: {this.getTotalNumberOfListItems(items)}
+              Total Tasks: {this.getTotalNumberOfListItems(items)}
           </div>
 
         </h3>
