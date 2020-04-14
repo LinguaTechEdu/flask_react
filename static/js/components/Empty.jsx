@@ -1,10 +1,9 @@
-class EmptyList extends React.Component {
+const EmptyList = () => {
 
-  render () {
-      return (
-          <div>
-              There are no items in your list.
-          </div>
-      )
-  }
-}
+  return (
+      <div>
+          There are no items in your list.
+      </div>
+  )
+
+};

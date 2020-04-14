@@ -1,7 +1,7 @@
 class Todo extends React.Component {
   constructor(props) {
       super(props);
-      this.state = {};
+      this.state = this.props.item;
 
       // Bindings
       this.handleSubmit = this.handleSubmit.bind(this)
@@ -9,9 +9,7 @@ class Todo extends React.Component {
 
   handleSubmit (event) {
     event.preventDefault();
-
-    var listItemId = this.props.item.id;
-
+    var listItemId = this.state.id;
     this.props.removeListItem(listItemId);
   }
 

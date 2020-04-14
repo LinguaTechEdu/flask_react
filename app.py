@@ -1,41 +1,44 @@
-from flask import Flask, render_template, request, jsonify
-from models import Todo, connect_to_db
+from flask import Flask, render_template, request, jsonify, json
+from flask_cors import CORS, cross_origin
+from models import Todo, connect_to_db, db
 
 app = Flask(__name__)
+cors = CORS(app)
 
 
 @app.route('/')
-def index():
-    """Static sanity test! No information is displayed on this page."""
+@cross_origin()
+def todo_view():
+    """React view."""
     return render_template('index.html')
 
 
-@app.route('/todos')
-def todo_view():
-    """React view."""
-    return render_template('todos/list.html')
-
-
 @app.route('/api/v1/todos')
+@cross_origin()
 def todo_list():
-    todo_objs = Todo.query.all()
-    todos = []
-    for item in todo_objs:
-        todo = item.__dict__
-        del todo['_sa_instance_state']
-        todos.append(todo)
-
-    app.logger.info("Total items: ", len(todos))
-    return jsonify(todos)
+    todos = Todo.query.all()
+    app.logger.info(f"Total items: {Todo.query.count()}")
+    return jsonify([todo.serialize() for todo in todos])
 
 
-@app.route('/api/v1/todo', methods=['POST'])
+@app.route('/api/v1/todos', methods=['POST'])
+@cross_origin()
 def todo_new():
-    new_todo = Todo(**request.data).__dict__
-    del new_todo['_sa_instance_state']
-    app.logger.info(new_todo)
+    app.logger.info('Creating a new todo item...')
+    data = json.loads(request.data.decode('utf-8'))
+    todo = Todo(**data)
+    todo.save()
+    app.logger.info(todo)
 
-    return jsonify(new_todo)
+    return jsonify(todo.serialize())
+
+
+@app.route('/api/v1/todos', methods=['DELETE'])
+def get_todo():
+    data = json.loads(request.data.decode('utf-8'))
+    todo = Todo.query.get(data['id'])
+    todo.delete()
+    return jsonify({}), 204
 
 
 if __name__ == '__main__':

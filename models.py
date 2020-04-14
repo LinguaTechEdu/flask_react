@@ -12,6 +12,20 @@ class Todo(db.Model):
     name = db.Column(db.String)
     description = db.Column(db.Text)
 
+    def __repr__(self):
+        return f'<Todo {self.id} | {self.name}>'
+
+    def serialize(self):
+        return {'id': self.id, 'name': self.name, 'description': self.description}
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
 
 def connect_to_db(app):
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///todo_app'
@@ -33,6 +47,7 @@ if __name__ == '__main__':
     from flask import Flask
     app = Flask(__name__)
     connect_to_db(app)
-    print("Connected to DB.")
-    db.create_all()
+    db.drop_all()
 
+    db.create_all()
+    print("Connected to DB.")

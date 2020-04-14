@@ -1,35 +1,30 @@
-var styleRequired = {
-  color: "#ffaaaa"
-};
-
-function guid() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
-
 class TodoForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-
-        this.handleSubmitEvent = this.handleSubmitEvent.bind(this);
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+        name: '',
+        description: ''
+    };
+    this.styleRequired = { color: "#ffaaaa" };
+    this.handleSubmitEvent = this.handleSubmitEvent.bind(this);
+  }
 
   handleSubmitEvent (event) {
     event.preventDefault();
+      const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.state)
+      };
+      fetch('http://localhost:4000/api/v1/todos', requestOptions)
+          .then(response => response.json())
+          .then(data => this.props.addListItem(data));
+  }
 
-    var item = {
-      id: guid(),
-      date: new Date(),
-      name: this.refs.name.value.trim(),
-      description: this.refs.description.value.trim()
-    };
-
-    this.props.addListItem(item);
+  handleChange(evt) {
+    this.setState({
+        [evt.target.name]: evt.target.value
+    })
   }
 
   render () {
@@ -38,20 +33,17 @@ class TodoForm extends React.Component {
         <h3 className="page-header">Add New Task</h3>
 
         <div className="form-group">
-          <label htmlFor="listItemName">Name <span style={styleRequired}>*</span></label>
-          <input type="text" className="form-control" id="listItemName" placeholder="Enter name" required ref="name" />
+          <label htmlFor="listItemName">Name <span style={this.styleRequired}>*</span></label>
+          <input type="text" className="form-control" id="listItemName"
+                 placeholder="Enter name" required name="name"
+                 onChange={ evt => this.handleChange(evt)}/>
         </div>
 
         <div className="form-group">
           <label htmlFor="listItemDescription">Description</label>
-          <textarea className="form-control" rows="3" id="listItemDescription" placeholder="Enter description" ref="description"></textarea>
-        </div>
-
-        <div className="form-group">
-          <div className="row">
-            <div className="col-xs-5 col-sm-6 col-md-4">
-            </div>
-          </div>
+          <textarea className="form-control" rows="3" id="listItemDescription"
+                    placeholder="Enter description" name="description"
+                    onChange={evt => this.handleChange(evt)} />
         </div>
 
         <hr />
