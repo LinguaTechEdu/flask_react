@@ -50,4 +50,4 @@ if __name__ == '__main__':
     db.drop_all()
 
     db.create_all()
-    print("Connected to DB.")
+    print("Database and tables created.")
